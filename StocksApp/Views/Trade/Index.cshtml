@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+@model StocksApp.Models.StockTrade
+<html>
+<head>
+    <title>Stocks</title>
+    <link href="~/StyleSheet.css" rel="stylesheet" />
+</head>
+<body>
+<h1 class="margin-left">Stocks</h1>
+<div class="margin-left flex">
+    <div class ="box">
+        @Model.StockName
+        (@Model.StockSymbol)
+        <div class="flex">
+            $@($"{Model.Price:F2}")
+        </div>
+    </div>
+</div>
+</body>
+</html>
