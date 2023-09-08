@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StocksApp.Models;
-using StocksApp.ServiceContracts;
-using System.Diagnostics;
+using ServiceContracts;
 
 namespace StocksApp.Controllers
 {
@@ -20,7 +19,7 @@ namespace StocksApp.Controllers
         {
             var companyProfileDictionary = _finnhubService.GetCompanyProfile(_configuration["TradingOptions:DefaultStockSymbol"]).Result;
             var stockQuoteDictionary = _finnhubService.GetStockPriceQuote(_configuration["TradingOptions:DefaultStockSymbol"]).Result;
-            var stockTrade = new StockTrade()
+            var stockTrade = new StockTrade
             {
                 StockSymbol = companyProfileDictionary["ticker"].ToString(),
                 StockName = companyProfileDictionary["name"].ToString(),

@@ -1,11 +1,11 @@
-﻿using System.Text.Json;
-using StocksApp.ServiceContracts;
-namespace StocksApp.Services
+﻿using System.Net.Http.Json;
+using Microsoft.Extensions.Configuration;
+using ServiceContracts;
+
+namespace Services
 {
     public class FinnhubService : IFinnhubService
     {
-        //GetCompanyProfile: https://finnhub.io/api/v1/stock/profile2?symbol={symbol}&token={token}
-        //GetStockPriceQuote: https://finnhub.io/api/v1/quote?symbol={symbol}&token={token}
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
         public FinnhubService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
