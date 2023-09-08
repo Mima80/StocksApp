@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Entities;
+
 
 namespace ServiceContracts.DTO
 {
@@ -17,7 +14,17 @@ namespace ServiceContracts.DTO
         public uint? Quantity { get; set; }
         [Range(1, 100000)]
         public double? Price { get; set; }
-    }
 
-    public BuyOrder
+        public BuyOrder ToBuyOrder()
+        {
+            return new BuyOrder
+            {
+                StockSymbol = StockSymbol,
+                StockName = StockName,
+                DateAndTimeOfOrder = DateAndTimeOfOrder,
+                Quantity = Quantity,
+                Price = Price
+            };
+        }
+    }
 }
