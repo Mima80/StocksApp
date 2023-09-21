@@ -11,14 +11,10 @@ namespace ServiceContracts.DTO
     public class SellOrderResponse
     {
         public Guid SellOrderID { get; set; }
-        [Required]
         public string StockSymbol { get; set; }
-        [Required]
         public string StockName { get; set; }
         public DateTime DateAndTimeOfOrder { get; set; }
-        [Range(1, 100000)]
         public uint Quantity { get; set; }
-        [Range(1, 10000)]
         public double? Price { get; set; }
         public double? TradeAmount { get; set; }
         public override bool Equals(object? obj)
@@ -30,11 +26,6 @@ namespace ServiceContracts.DTO
                    && StockName == other.StockName
                    && Price == other.Price
                    && TradeAmount == other.TradeAmount;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(SellOrderID, StockSymbol, StockName, DateAndTimeOfOrder, Quantity, Price, TradeAmount);
         }
     }
     public static class SellOrderExtensions

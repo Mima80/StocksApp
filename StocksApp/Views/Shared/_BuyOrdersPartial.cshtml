@@ -1,0 +1,16 @@
+﻿@model ServiceContracts.DTO.BuyOrderResponse
+
+<div style="margin: 10px; border: 2px solid grey; border-width: 0 0 2px 0; display: flex; flex-direction: column">
+    <h4 style="margin: 0 0 10px 0">
+        @Model.StockName (@Model.StockSymbol)
+    </h4>
+    <div>
+        @Model.Quantity shares at $@Model.Price
+    </div>
+    <div>
+        TradeAmount: $@Model.TradeAmount
+    </div>
+    <div>
+        @Model.DateAndTimeOfOrder
+    </div>
+</div>

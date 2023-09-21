@@ -1,20 +1,43 @@
-﻿<!DOCTYPE html>
-@model StocksApp.Models.StockTrade
-<html>
-<head>
-    <title>Stocks</title>
-    <link href="~/StyleSheet.css" rel="stylesheet" />
-</head>
-<body>
-<h1 class="margin-left">Stocks</h1>
-<div class="margin-left flex">
-    <div class ="box">
-        @Model.StockName
-        (@Model.StockSymbol)
+﻿@model StocksApp.Models.StockTrade
+
+<label style="margin: 10px">Stocks > @Model.StockName</label>
+<form id="myForm" method="post">
+<div style="border: 1px solid grey; display: flex; background-color: lightgray; margin: 10px; border-radius: 10px; justify-content: space-between">
+    
+    <div style="margin: 20px">
+        <h1 style="margin: 0;" class="font-color-blue">
+            @Model.StockName
+            (@Model.StockSymbol)
+        </h1>
         <div class="flex">
-            $@($"{Model.Price:F2}")
+            <h1 style="margin: 0; font-size: 40px"> $ @($"{Model.Price:F2}") </h1>
         </div>
     </div>
+    
+    <div style="margin: 20px;border: 1px solid grey; border-width: 0px 0px 0px 1px; margin-right: 30%">
+        <h3 style="margin: 10px 0 0 50px">New order</h3>
+        <h4 style="margin: 10px 0 0 50px"> Quantity </h4>
+        <input style="margin: 10px 0 0 50px; border-radius: 10px; font-size: 20px; width: 70px; padding: 5px" type="number" id="quantity" name="quantity"/>
+        <div style=" margin: 10px 0 0 50px;">
+            <button style="background-color: green; border-radius: 15px; height: 100%; padding: 10px 10px 10px 10px" type="button" id="buyButton">Buy</button>
+            <button style="background-color: Red; border-radius: 15px; height: 100%; padding: 10px 10px 10px 10px" type="button" id="sellButton"> Sell</button>
+        </div>
+    </div>
+    <input type="hidden" id="buyPressed" name="buyPressed" value="" >
+    <input type="hidden" id="sellPressed" name="sellPressed" value="">
+    
 </div>
-</body>
-</html>
+</form>
+<script>
+        document.getElementById("sellButton").addEventListener("click", function () {
+            document.getElementById("sellPressed").value = "true"; // Установите значение "true" для sellPressed
+            document.getElementById("buyPressed").value = ""; // Уберите значение для buyPressed
+            document.getElementById("myForm").submit();
+        });
+        document.getElementById("buyButton").addEventListener("click", function () {
+            document.getElementById("buyPressed").value = "true"; // Установите значение "true" для buyPressed
+            document.getElementById("sellPressed").value = ""; // Уберите значение для sellPressed
+            document.getElementById("myForm").submit();
+        });
+    </script>
+
