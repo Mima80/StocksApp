@@ -24,11 +24,13 @@
 <div class="page-content">
     @RenderBody()
 </div>
-    <script>
+<script>
         function navigateToURL() {
             var url = document.getElementById("urlInput").value;
             window.location.href = url;
         }
     </script>
+
+@await RenderSectionAsync("scripts", required:false);
 </body>
 </html>
