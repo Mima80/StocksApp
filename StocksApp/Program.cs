@@ -1,12 +1,19 @@
 using ServiceContracts;
 using Services;
-
+using Microsoft.EntityFrameworkCore;
+using Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
-builder.Services.AddSingleton<IStocksService,StocksService>();
+builder.Services.AddScoped<IStocksService,StocksService>();
+
+builder.Services.AddDbContext<OrderDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
 var app = builder.Build();
 
 app.UseStaticFiles();
