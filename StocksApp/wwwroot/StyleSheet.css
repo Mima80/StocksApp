@@ -2,6 +2,90 @@
     font-family: sans-serif;
 }
 
+.label-margin {
+    margin: 10px;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px; 
+    border-radius: 10px;
+}
+
+.stock-frame {
+    background-color: lightgray;
+    border: 1px solid grey;
+}
+
+.stock-info {
+    margin: 20px;
+}
+
 .font-color-blue {
+    margin: 0;
     color: blue;
+}
+
+.price {
+    margin: 0;
+    font-size: 40px;
+}
+
+.new-order {
+    margin: 20px;
+    border: 1px solid grey;
+    border-width: 0px 0px 0px 1px;
+    margin-right: 30%;
+}
+
+.new-order-title {
+    margin: 10px 0 0 50px;
+}
+
+.quantity-label {
+    margin: 10px 0 0 50px;
+}
+
+.quantity-input {
+    margin: 10px 0 0 50px;
+    border-radius: 10px;
+    font-size: 20px;
+    width: 70px;
+    padding: 5px;
+}
+
+.button-container {
+    margin: 10px 0 0 50px;
+}
+
+.buy-button {
+    background-color: green;
+    border-radius: 15px;
+    height: 100%;
+    padding: 10px;
+}
+
+.sell-button {
+    background-color: red;
+    border-radius: 15px;
+    height: 100%;
+    padding: 10px;
+}
+
+.header-label {
+    margin: 10px;
+}
+
+.order-container {
+    border: 1px solid grey;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    width: 45%;
+}
+
+.order-header {
+    margin: 5px 10px 10px 10px;
+    color: lightgray;
 }

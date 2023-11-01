@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Entities;
+﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services.Helpers;
@@ -12,40 +8,46 @@ namespace Services
 {
     public class StocksService : IStocksService
     {
-        private readonly List<BuyOrder> _buyOrders = new();
-        private readonly List<SellOrder> _sellOrders = new();
-        public Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
+        private readonly OrderDbContext _orderDbContext;
+
+        public StocksService(OrderDbContext orderDbContext)
+        {
+            _orderDbContext = orderDbContext;
+        }
+        public async Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
         {
             if (buyOrderRequest == null)
                 throw new ArgumentNullException();
             ValidationHelper.ModelValidation(buyOrderRequest);
             var buyOrderToAdd = buyOrderRequest.ToBuyOrder();
             buyOrderToAdd.BuyOrderID = Guid.NewGuid();
-            _buyOrders.Add(buyOrderToAdd);
-            return Task.FromResult(buyOrderToAdd.ToBuyOrderResponse());
+            await _orderDbContext.BuyOrders.AddAsync(buyOrderToAdd);
+            await _orderDbContext.SaveChangesAsync();
+            return buyOrderToAdd.ToBuyOrderResponse();
         }
 
-        public Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? sellOrderRequest)
+        public async Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? sellOrderRequest)
         {
             if (sellOrderRequest == null)
                 throw new ArgumentNullException();
             ValidationHelper.ModelValidation(sellOrderRequest);
             var sellOrderToAdd = sellOrderRequest.ToSellOrder();
             sellOrderToAdd.SellOrderID = Guid.NewGuid();
-            _sellOrders.Add(sellOrderToAdd);
-            return Task.FromResult(sellOrderToAdd.ToSellOrderResponse());
+            await _orderDbContext.SellOrders.AddAsync(sellOrderToAdd);
+            await _orderDbContext.SaveChangesAsync();
+            return sellOrderToAdd.ToSellOrderResponse();
         }
 
-        public Task<List<BuyOrderResponse>> GetBuyOrders()
+        public async Task<List<BuyOrderResponse>> GetBuyOrders()
         {
-            var buyOrderResponses = _buyOrders.Select(buyOrder => buyOrder.ToBuyOrderResponse()).ToList();
-            return Task.FromResult(buyOrderResponses);
+            var buyOrderResponses = await _orderDbContext.BuyOrders.Select(buyOrder => buyOrder.ToBuyOrderResponse()).ToListAsync();
+            return new List<BuyOrderResponse>(buyOrderResponses.OrderBy(p => p.DateAndTimeOfOrder).Reverse());
         }
 
-        public Task<List<SellOrderResponse>> GetSellOrders()
+        public async Task<List<SellOrderResponse>> GetSellOrders()
         {
-            var sellOrderResponses = _sellOrders.Select(sellOrder => sellOrder.ToSellOrderResponse()).ToList();
-            return Task.FromResult(sellOrderResponses);
+            var sellOrderResponses = await _orderDbContext.SellOrders.Select(sellOrder => sellOrder.ToSellOrderResponse()).ToListAsync();
+            return new List<SellOrderResponse>(sellOrderResponses.OrderBy(p => p.DateAndTimeOfOrder).Reverse());
         }
     }
 }

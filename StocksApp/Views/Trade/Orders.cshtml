@@ -1,16 +1,16 @@
 ﻿@model StocksApp.ViewModels.Orders
 
-<label style="margin: 10px">Stocks > Orders</label>
-<div style="margin: 15px; display: flex; justify-content: space-between; align-items: flex-start">
-    <div style="border: 1px solid grey; display: flex;border-radius: 10px; flex-direction: column; width: 45%">
-        <h4 style="margin: 5px 10px 10px 10px;  color: lightgray">Buy Orders</h4>
+<label class="header-label">Stocks > Orders</label>
+<div class="flex-container" style="align-items: start">
+    <div class="order-container" >
+        <h4 class="order-header">Buy Orders</h4>
         @foreach (var buyOrder in Model.BuyOrders)
         {
             <partial name="_BuyOrdersPartial" model="buyOrder"></partial>
         }
     </div>
-    <div style="border: 1px solid grey; display: flex;border-radius: 10px; flex-direction: column; width: 45%;">
-        <h4 style="margin: 5px 10px 10px 10px; color: lightgray">Sell Orders</h4>
+    <div class="order-container">
+        <h4 class="order-header">Sell Orders</h4>
         @foreach (var sellOrder in Model.SellOrders)
         {
             <partial name="_SellOrdersPartial" model="sellOrder"></partial>

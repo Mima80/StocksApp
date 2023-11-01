@@ -6,6 +6,7 @@ using StocksApp.ViewModels;
 
 namespace StocksApp.Controllers
 {
+    [Route("[controller]")]
     public class TradeController : Controller
     {
         private readonly IFinnhubService _finnhubService;
@@ -18,39 +19,17 @@ namespace StocksApp.Controllers
             _configuration = configuration;
             _stocksService = stocksService;
         }
+
         [Route("/")]
+        [Route("[action]")]
+        [Route("~/[controller]")]
         [Route("/{stockSymbolFromUser}")]
-        public IActionResult Index([FromRoute] string? stockSymbolFromUser, bool buyPressed, bool sellPressed, uint quantity)
+        public async Task<IActionResult> Index([FromRoute] string? stockSymbolFromUser)
         {
+            stockSymbolFromUser = stockSymbolFromUser == "favicon.ico" ? null : stockSymbolFromUser;
             var stockSymbol = stockSymbolFromUser ?? _configuration["TradingOptions:DefaultStockSymbol"];
             var companyProfileDictionary = _finnhubService.GetCompanyProfile(stockSymbol).Result;
             var stockQuoteDictionary = _finnhubService.GetStockPriceQuote(stockSymbol).Result;
-
-            if (quantity != 0)
-            {
-                if (buyPressed)
-                {
-                    _stocksService.CreateBuyOrder(new BuyOrderRequest
-                    {
-                        DateAndTimeOfOrder = DateTime.Now,
-                        Price = double.Parse(stockQuoteDictionary["c"].ToString().Replace('.', ',')),
-                        Quantity = quantity,
-                        StockName = companyProfileDictionary["name"].ToString(),
-                        StockSymbol = stockSymbol
-                    });
-                }
-                if (sellPressed)
-                {
-                    _stocksService.CreateSellOrder(new SellOrderRequest()
-                    {
-                        DateAndTimeOfOrder = DateTime.Now,
-                        Price = double.Parse(stockQuoteDictionary["c"].ToString().Replace('.', ',')),
-                        Quantity = quantity,
-                        StockName = companyProfileDictionary["name"].ToString(),
-                        StockSymbol = stockSymbol
-                    });
-                }
-            }
 
             var stockTrade = new StockTrade
             {
@@ -61,13 +40,33 @@ namespace StocksApp.Controllers
             return View(stockTrade);
         }
 
-        [Route("orders")]
-        public IActionResult Orders()
+
+        [Route("[action]")]
+        [HttpPost]
+        public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
+        {
+            buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            return RedirectToAction(nameof(Orders));
+        }
+
+
+        [Route("[action]")]
+        [HttpPost]
+        public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
+        {
+            sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
+            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            return RedirectToAction(nameof(Orders));
+        }
+
+        [Route("[action]")]
+        public async Task<IActionResult> Orders()
         {
             var Orders = new Orders
             {
-                BuyOrders = _stocksService.GetBuyOrders().Result,
-                SellOrders = _stocksService.GetSellOrders().Result
+                BuyOrders = await _stocksService.GetBuyOrders(),
+                SellOrders = await _stocksService.GetSellOrders()
             };
             return View(Orders);
         }
