@@ -6,7 +6,7 @@ using StocksApp.ViewModels;
 
 namespace StocksApp.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class TradeController : Controller
     {
         private readonly IFinnhubService _finnhubService;
@@ -21,13 +21,13 @@ namespace StocksApp.Controllers
         }
 
         [Route("/")]
-        [Route("[action]/{stockSymbolFromUser}")]
+        [Route("{stockSymbolFromUser}")]
         public async Task<IActionResult> Index([FromRoute] string? stockSymbolFromUser)
         {
             stockSymbolFromUser = stockSymbolFromUser == "favicon.ico" ? null : stockSymbolFromUser;
             var stockSymbol = stockSymbolFromUser ?? _configuration["TradingOptions:DefaultStockSymbol"];
-            var companyProfileDictionary = _finnhubService.GetCompanyProfile(stockSymbol).Result;
-            var stockQuoteDictionary = _finnhubService.GetStockPriceQuote(stockSymbol).Result;
+            var companyProfileDictionary = await _finnhubService.GetCompanyProfile(stockSymbol);
+            var stockQuoteDictionary = await _finnhubService.GetStockPriceQuote(stockSymbol);
 
             var stockTrade = new StockTrade
             {
@@ -38,8 +38,6 @@ namespace StocksApp.Controllers
             return View(stockTrade);
         }
 
-
-        [Route("[action]")]
         [HttpPost]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
@@ -48,8 +46,6 @@ namespace StocksApp.Controllers
             return RedirectToAction(nameof(Orders));
         }
 
-
-        [Route("[action]")]
         [HttpPost]
         public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
         {
@@ -58,7 +54,6 @@ namespace StocksApp.Controllers
             return RedirectToAction(nameof(Orders));
         }
 
-        [Route("[action]")]
         public async Task<IActionResult> Orders()
         {
             var Orders = new Orders
