@@ -21,9 +21,7 @@ namespace StocksApp.Controllers
         }
 
         [Route("/")]
-        [Route("[action]")]
-        [Route("~/[controller]")]
-        [Route("/{stockSymbolFromUser}")]
+        [Route("[action]/{stockSymbolFromUser}")]
         public async Task<IActionResult> Index([FromRoute] string? stockSymbolFromUser)
         {
             stockSymbolFromUser = stockSymbolFromUser == "favicon.ico" ? null : stockSymbolFromUser;
@@ -46,7 +44,7 @@ namespace StocksApp.Controllers
         public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
             buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
-            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            var buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
@@ -56,7 +54,7 @@ namespace StocksApp.Controllers
         public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
         {
             sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
-            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            var sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 

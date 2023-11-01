@@ -19,17 +19,17 @@
     </div>
 <div style="display: flex; margin: 10px;">
     <a href="/" style="font-size: medium; margin-right: 10px">Trade</a>
-    <a href="/orders" style="font-size: medium">Orders</a>
+    <a href="/trade/orders" style="font-size: medium">Orders</a>
 </div>
 <div class="page-content">
     @RenderBody()
 </div>
 <script>
         function navigateToURL() {
-            var url = document.getElementById("urlInput").value;
+            var url = "trade/index/" + document.getElementById("urlInput").value;
             window.location.href = url;
         }
-    </script>
+</script>
 
 @await RenderSectionAsync("scripts", required:false);
 </body>
