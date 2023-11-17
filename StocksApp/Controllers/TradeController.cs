@@ -28,7 +28,7 @@ namespace StocksApp.Controllers
             var stockSymbol = stockSymbolFromUser ?? _configuration["TradingOptions:DefaultStockSymbol"];
             var companyProfileDictionary = await _finnhubService.GetCompanyProfile(stockSymbol);
             var stockQuoteDictionary = await _finnhubService.GetStockPriceQuote(stockSymbol);
-
+            ViewBag.FinnhubToken = _configuration["FinnhubToken"] ?? throw new KeyNotFoundException();
             var stockTrade = new StockTrade
             {
                 StockSymbol = companyProfileDictionary["ticker"].ToString(),
@@ -38,11 +38,12 @@ namespace StocksApp.Controllers
             return View(stockTrade);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
         {
             buyOrderRequest.DateAndTimeOfOrder = DateTime.Now;
-            var buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            await _stocksService.CreateBuyOrder(buyOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
@@ -50,18 +51,18 @@ namespace StocksApp.Controllers
         public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
         {
             sellOrderRequest.DateAndTimeOfOrder = DateTime.Now;
-            var sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            await _stocksService.CreateSellOrder(sellOrderRequest);
             return RedirectToAction(nameof(Orders));
         }
 
         public async Task<IActionResult> Orders()
         {
-            var Orders = new Orders
+            var orders = new Orders
             {
                 BuyOrders = await _stocksService.GetBuyOrders(),
                 SellOrders = await _stocksService.GetSellOrders()
             };
-            return View(Orders);
+            return View(orders);
         }
     }
 }

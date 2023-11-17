@@ -1,53 +1,37 @@
 ﻿using System.Net.Http.Json;
 using Microsoft.Extensions.Configuration;
+using RepositoryContracts;
 using ServiceContracts;
 
 namespace Services
 {
     public class FinnhubService : IFinnhubService
     {
-        private readonly IConfiguration _configuration;
-        private readonly IHttpClientFactory _httpClientFactory;
-        public FinnhubService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
-        {
-            _configuration = configuration;
-            _httpClientFactory = httpClientFactory;
-        }
-        public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
-        {
-            var httpClient = _httpClientFactory.CreateClient();
-            var httpRequestMessage = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://finnhub.io/api/v1/stock/profile2?symbol={stockSymbol}&token={_configuration["FinnhubToken"]}")
-            };
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-            var responseDictionary = await httpResponseMessage.Content.ReadFromJsonAsync<Dictionary<string, object>>();
+        private readonly IFinnhubRepository _finnhubRepository;
 
-            if (responseDictionary == null)
-                throw new InvalidOperationException("No response from server");
-            if (responseDictionary.ContainsKey("error"))
-                throw new InvalidOperationException(Convert.ToString(responseDictionary["error"]));
-
-            return responseDictionary;
+        public FinnhubService(IFinnhubRepository finnhubRepository)
+        {
+            _finnhubRepository = finnhubRepository;
         }
         public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol)
         {
-            var httpClient = _httpClientFactory.CreateClient();
-            var httpRequestMessage = new HttpRequestMessage()
-            {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri($"https://finnhub.io/api/v1/quote?symbol={stockSymbol}&token={_configuration["FinnhubToken"]}")
-            };
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-            var responseDictionary = await httpResponseMessage.Content.ReadFromJsonAsync<Dictionary<string, object>>();
-
-            if (responseDictionary == null)
-                throw new InvalidOperationException("No response from server");
-            if (responseDictionary.ContainsKey("error"))
-                throw new InvalidOperationException(Convert.ToString(responseDictionary["error"]));
-
-            return responseDictionary;
+            return await _finnhubRepository.GetStockPriceQuote(stockSymbol);
         }
+
+        public async Task<List<Dictionary<string, string>>?> GetStocks()
+        {
+            return await _finnhubRepository.GetStocks();
+        }
+
+        public async Task<Dictionary<string, object>?> SearchStocks(string stockSymbolToSearch)
+        {
+            return await _finnhubRepository.SearchStocks(stockSymbolToSearch);
+        }
+
+        public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
+        {
+            return await _finnhubRepository.GetCompanyProfile(stockSymbol);
+        }
+
     }
 }

@@ -2,12 +2,15 @@ using ServiceContracts;
 using Services;
 using Microsoft.EntityFrameworkCore;
 using Entities;
+using Repositories;
+using RepositoryContracts;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.AddScoped<IStocksService,StocksService>();
+builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
 {
