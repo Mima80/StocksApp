@@ -1,0 +1,25 @@
+﻿@model StocksApp.Models.StockTrade
+@*<div style="position: sticky; top: 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div>
+        <img src="@Model.Logo" alt="Stock Logo" style="width: 200px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
+        <h3 style="margin-top: 10px; font-size: 24px; color: #333; font-weight: bold;">@Model.StockName (@Model.StockSymbol)</h3>
+        <h4 style="font-size: 18px; color: #666; margin-bottom: 10px;">@Model.Exchange</h4>
+        <h4 style="font-size: 18px; color: #666; margin-bottom: 10px;">@Model.Industry</h4>
+        <h1 style="font-size: 36px; color: #28a745; margin-top: 20px;">$@Model.Price</h1>
+        <a href="~/Trade/Index/@Model.StockSymbol" style="text-decoration: none; display: inline-block; padding: 10px; background-color: #28a745; color: #fff; border-radius: 4px; transition: background-color 0.3s;">Trade Now</a>
+    </div>
+</div>*@
+<div style="position: sticky; top: 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div>
+        <!-- Placeholder для изображения (серый прямоугольник) -->
+        <div style="width: 200px; height: 200px; background-color: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <!-- Используйте placeholder вместо изображения при загрузке -->
+            <img src="@Model.Logo" alt="Stock Logo" style="width: 200px; height: 200px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: none;" onload="this.style.display='block';" />
+        </div>
+        <h3 style="margin-top: 10px; font-size: 24px; color: #333; font-weight: bold;">@Model.StockName (@Model.StockSymbol)</h3>
+        <h4 style="font-size: 18px; color: #666; margin-bottom: 10px;">@Model.Exchange</h4>
+        <h4 style="font-size: 18px; color: #666; margin-bottom: 10px;">@Model.Industry</h4>
+        <h1 style="font-size: 36px; color: #28a745; margin-top: 20px;">$@Model.Price</h1>
+        <a href="~/Trade/Index/@Model.StockSymbol" style="text-decoration: none; display: inline-block; padding: 10px; background-color: #28a745; color: #fff; border-radius: 4px; transition: background-color 0.3s;">Trade Now</a>
+    </div>
+</div>

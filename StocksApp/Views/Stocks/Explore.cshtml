@@ -1,4 +1,23 @@
 ﻿@model System.Collections.Generic.List<StocksApp.ViewModels.Stock>
 
-<h1>Ебланище ты конечно тупорылое</h1>
-@Model[0].StockName, @Model[0].StockSymbol
+<div style="margin: 10px; display: flex; flex-direction: row; align-items: start;">
+    <div style="width: 30%; padding: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            @foreach (var stock in Model)
+            {
+                <li style="margin-bottom: 10px;">
+                    <a href="~/Stocks/Explore/@stock.StockSymbol" style="text-decoration: none; color: #333; display: block; padding: 10px; border: 1px solid #ddd; border-radius: 4px; transition: background-color 0.3s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <span style="font-weight: bold;">@stock.StockName</span>
+                        <div style="font-size: 12px; color: #666;">(@stock.StockSymbol)</div>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div style="width: 69%;position: relative; margin: 10px">
+        @if (ViewBag.StockSymbol != null)
+        {
+            @await Component.InvokeAsync("SelectedStock", ViewBag.StockSymbol)
+        }
+    </div>
+</div>

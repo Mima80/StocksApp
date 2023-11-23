@@ -1,4 +1,6 @@
 ﻿//Create a WebSocket to perform duplex (back-and-forth) communication with server
+console.log("mi v skripte");
+
 const token = document.querySelector("#FinnhubToken").value;
 const socket = new WebSocket(`wss://ws.finnhub.io?token=${token}`);
 var stockSymbol = document.getElementById("StockSymbol").value; //get symbol from input hidden
@@ -11,6 +13,7 @@ socket.addEventListener('open', function (event) {
 
 // Listen (ready to receive) for messages
 socket.addEventListener("message", function (event) {
+    console.log("добавляем слушателя");
 
     //if error message is received from server
     if (event.data.type == "error") {

@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Json;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using RepositoryContracts;
 
@@ -8,11 +10,14 @@ namespace Repositories
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
+        private const string CacheKey = "StocksCacheKey";
 
-        public FinnhubRepository (IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public FinnhubRepository (IHttpClientFactory httpClientFactory, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _memoryCache = memoryCache;
         }
         public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
         {
@@ -43,7 +48,6 @@ namespace Repositories
             };
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
             var responseDictionary = await httpResponseMessage.Content.ReadFromJsonAsync<Dictionary<string, object>>();
-
             if (responseDictionary == null)
                 throw new InvalidOperationException("No response from server");
             if (responseDictionary.ContainsKey("error"))
@@ -54,6 +58,10 @@ namespace Repositories
 
         public async Task<List<Dictionary<string, string>>?> GetStocks()
         {
+            if (_memoryCache.TryGetValue(CacheKey, out List<Dictionary<string, string>>? responseList))
+            {
+                return responseList;
+            }
             var httpClient = _httpClientFactory.CreateClient();
             var httpRequestMessage = new HttpRequestMessage()
             {
@@ -61,8 +69,8 @@ namespace Repositories
                 RequestUri = new Uri($"https://finnhub.io/api/v1/stock/symbol?exchange=US&token={_configuration["FinnhubToken"]}")
             };
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-            var responseList = await httpResponseMessage.Content.ReadFromJsonAsync<List<Dictionary<string, string>>?>();
-
+            responseList = await httpResponseMessage.Content.ReadFromJsonAsync<List<Dictionary<string, string>>?>();
+            
             if (responseList == null)
             {
                 throw new InvalidOperationException("No response from server");
@@ -74,6 +82,12 @@ namespace Repositories
                 if (responseDictionary.ContainsKey("error"))
                     throw new InvalidOperationException(Convert.ToString(responseDictionary["error"]));
             }
+
+            var memoryCacheOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromSeconds(60))
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                .SetPriority(CacheItemPriority.Normal);
+            _memoryCache.Set(CacheKey, responseList, memoryCacheOptions);
 
             return responseList;
         }

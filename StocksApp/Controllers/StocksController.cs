@@ -19,7 +19,9 @@ namespace StocksApp.Controllers
         }
 
         [Route("[action]")]
-        public async Task<IActionResult> Explore()
+        [Route("[action]/{stockSymbol}")]
+
+        public async Task<IActionResult> Explore(string stockSymbol)
         {
             var stockSymbols = _configuration["TradingOptions:Top25PopularStocks"]?.Split(",").ToList();
             var stockDictionaryList = await _finnhubService.GetStocks();
@@ -35,7 +37,8 @@ namespace StocksApp.Controllers
                 });
             }
 
-            return View(stocks);
+            ViewBag.StockSymbol = stockSymbol;
+            return View(stocks.OrderBy(stock => stock.StockName).ToList());
         }
     }
 }

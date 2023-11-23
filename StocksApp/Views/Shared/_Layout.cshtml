@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>@ViewBag.Title</title>
 </head>
-<body style="margin: 0px; zoom: 125%">
+<body style="margin: 0px; zoom: 110%">
     <div style="padding: 20px; background-color: lightgray; height: 15%; margin: 0px; display: flex; justify-content: space-between">
         <h3 style="font-size: 30px; margin: 0px">Stocks</h3>
         <div>
@@ -22,14 +22,14 @@
     <a href="/" style="font-size: medium; margin-right: 10px">Trade</a>
     <a href="/trade/orders" style="font-size: medium; margin-right: 10px">Orders</a>
 </div>
-<div class="page-content">
+<div>
     @RenderBody()
 </div>
 <script>
-        function navigateToURL() {
-            var url = "trade/index/" + document.getElementById("urlInput").value;
-            window.location.href = url;
-        }
+    function navigateToURL() {
+        var url = "trade/index/" + document.getElementById("urlInput").value;
+        window.location.href = url;
+    }
 </script>
 
 @await RenderSectionAsync("scripts", required:false);

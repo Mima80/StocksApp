@@ -11,6 +11,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.AddScoped<IStocksService,StocksService>();
 builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
+builder.Services.AddScoped<IStocksRepository, StocksRepository>();
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
 {
