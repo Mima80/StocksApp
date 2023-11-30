@@ -8,10 +8,10 @@ using RepositoryContracts;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<IFinnhubService, FinnhubService>();
-builder.Services.AddScoped<IStocksService,StocksService>();
-builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
-builder.Services.AddScoped<IStocksRepository, StocksRepository>();
+builder.Services.AddTransient<IFinnhubService, FinnhubService>();
+builder.Services.AddTransient<IStocksService,StocksService>();
+builder.Services.AddTransient<IFinnhubRepository, FinnhubRepository>();
+builder.Services.AddTransient<IStocksRepository, StocksRepository>();
 
 builder.Services.AddDbContext<OrderDbContext>(options =>
 {

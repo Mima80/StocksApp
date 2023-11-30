@@ -12,9 +12,9 @@
 <div style="position: sticky; top: 0; padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
     <div>
         <!-- Placeholder для изображения (серый прямоугольник) -->
-        <div style="width: 200px; height: 200px; background-color: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 200px; height: 200px; background-color: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 0 auto;">
             <!-- Используйте placeholder вместо изображения при загрузке -->
-            <img src="@Model.Logo" alt="Stock Logo" style="width: 200px; height: 200px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: none;" onload="this.style.display='block';" />
+            <img src="@Model.Logo" alt="Stock Logo" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); display: none;" onload="this.style.display='block';" />
         </div>
         <h3 style="margin-top: 10px; font-size: 24px; color: #333; font-weight: bold;">@Model.StockName (@Model.StockSymbol)</h3>
         <h4 style="font-size: 18px; color: #666; margin-bottom: 10px;">@Model.Exchange</h4>

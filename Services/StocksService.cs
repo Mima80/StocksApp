@@ -22,8 +22,7 @@ namespace Services
             ValidationHelper.ModelValidation(buyOrderRequest);
             var buyOrderToAdd = buyOrderRequest.ToBuyOrder();
             buyOrderToAdd.BuyOrderID = Guid.NewGuid();
-            await _stocksRepository.CreateBuyOrder(buyOrderToAdd);
-            return buyOrderToAdd.ToBuyOrderResponse();
+            return (await _stocksRepository.CreateBuyOrder(buyOrderToAdd)).ToBuyOrderResponse();
         }
 
         public async Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? sellOrderRequest)
@@ -33,8 +32,7 @@ namespace Services
             ValidationHelper.ModelValidation(sellOrderRequest);
             var sellOrderToAdd = sellOrderRequest.ToSellOrder();
             sellOrderToAdd.SellOrderID = Guid.NewGuid();
-            _stocksRepository.CreateSellOrder(sellOrderToAdd);
-            return sellOrderToAdd.ToSellOrderResponse();
+            return (await _stocksRepository.CreateSellOrder(sellOrderToAdd)).ToSellOrderResponse();
         }
 
         public async Task<List<BuyOrderResponse>> GetBuyOrders()
